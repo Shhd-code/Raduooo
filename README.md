@@ -11,27 +11,27 @@ local selectedTarget = "الكل"
 -- remote
 ----------------------------------------------------------------
 local function getRemote()
-	local gui = LP.PlayerGui:FindFirstChild("MountedGui")
-	if gui then
-		for _, v in pairs(gui:GetDescendants()) do
-			if v.Name == "Remote" and v:IsA("RemoteEvent") then
-				return v
-			end
-		end
-	end
+        local gui = LP.PlayerGui:FindFirstChild("MountedGui")
+        if gui then
+                for _, v in pairs(gui:GetDescendants()) do
+                        if v.Name == "Remote" and v:IsA("RemoteEvent") then
+                                return v
+                        end
+                end
+        end
 end
 
 local function fireRemote(target, code)
-	local r = getRemote()
-	if not r then return end
-	if target == "الكل" then
-		for _, p in pairs(Players:GetPlayers()) do
-			r:FireServer(p, code)
-		end
-	else
-		local p = Players:FindFirstChild(target)
-		if p then r:FireServer(p, code) end
-	end
+        local r = getRemote()
+        if not r then return end
+        if target == "الكل" then
+                for _, p in pairs(Players:GetPlayers()) do
+                        r:FireServer(p, code)
+                end
+        else
+                local p = Players:FindFirstChild(target)
+                if p then r:FireServer(p, code) end
+        end
 end
 
 ----------------------------------------------------------------
@@ -57,85 +57,85 @@ local DARK2    = Color3.fromRGB(28, 22, 45)
 local WHITE    = Color3.fromRGB(255, 255, 255)
 
 local function corner(p, r)
-	local c = Instance.new("UICorner", p)
-	c.CornerRadius = UDim.new(0, r or 12)
-	return c
+        local c = Instance.new("UICorner", p)
+        c.CornerRadius = UDim.new(0, r or 12)
+        return c
 end
 
 local function gradient(p, c1, c2, rot)
-	local g = Instance.new("UIGradient", p)
-	g.Color = ColorSequence.new(c1, c2)
-	g.Rotation = rot or 90
-	return g
+        local g = Instance.new("UIGradient", p)
+        g.Color = ColorSequence.new(c1, c2)
+        g.Rotation = rot or 90
+        return g
 end
 
 local function stroke(p, col, t, trans)
-	local s = Instance.new("UIStroke", p)
-	s.Color = col
-	s.Thickness = t or 1
-	s.Transparency = trans or 0
-	s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	return s
+        local s = Instance.new("UIStroke", p)
+        s.Color = col
+        s.Thickness = t or 1
+        s.Transparency = trans or 0
+        s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        return s
 end
 
 -- crisp white text with subtle dark outline for legibility
 local function whiteText(lbl)
-	lbl.TextColor3 = WHITE
-	lbl.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-	lbl.TextStrokeTransparency = 0.55
+        lbl.TextColor3 = WHITE
+        lbl.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        lbl.TextStrokeTransparency = 0.55
 end
 
 local function glow(p, col)
-	local s = Instance.new("UIStroke", p)
-	s.Color = col
-	s.Thickness = 1.5
-	s.Transparency = 0.3
-	task.spawn(function()
-		while s.Parent do
-			TweenService:Create(s, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.75, Thickness = 2.5}):Play()
-			task.wait(1.4)
-			TweenService:Create(s, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.3, Thickness = 1.5}):Play()
-			task.wait(1.4)
-		end
-	end)
-	return s
+        local s = Instance.new("UIStroke", p)
+        s.Color = col
+        s.Thickness = 1.5
+        s.Transparency = 0.3
+        task.spawn(function()
+                while s.Parent do
+                        TweenService:Create(s, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.75, Thickness = 2.5}):Play()
+                        task.wait(1.4)
+                        TweenService:Create(s, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.3, Thickness = 1.5}):Play()
+                        task.wait(1.4)
+                end
+        end)
+        return s
 end
 
 local function hoverScale(btn)
-	local baseSize = btn.Size
-	btn.MouseEnter:Connect(function()
-		TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-			{Size = UDim2.new(baseSize.X.Scale, baseSize.X.Offset, baseSize.Y.Scale, baseSize.Y.Offset + 2)}):Play()
-	end)
-	btn.MouseLeave:Connect(function()
-		TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quad), {Size = baseSize}):Play()
-	end)
-	btn.MouseButton1Down:Connect(function()
-		TweenService:Create(btn, TweenInfo.new(0.08), {Size = UDim2.new(baseSize.X.Scale, baseSize.X.Offset - 2, baseSize.Y.Scale, baseSize.Y.Offset - 2)}):Play()
-	end)
-	btn.MouseButton1Up:Connect(function()
-		TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = baseSize}):Play()
-	end)
+        local baseSize = btn.Size
+        btn.MouseEnter:Connect(function()
+                TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(baseSize.X.Scale, baseSize.X.Offset, baseSize.Y.Scale, baseSize.Y.Offset + 2)}):Play()
+        end)
+        btn.MouseLeave:Connect(function()
+                TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quad), {Size = baseSize}):Play()
+        end)
+        btn.MouseButton1Down:Connect(function()
+                TweenService:Create(btn, TweenInfo.new(0.08), {Size = UDim2.new(baseSize.X.Scale, baseSize.X.Offset - 2, baseSize.Y.Scale, baseSize.Y.Offset - 2)}):Play()
+        end)
+        btn.MouseButton1Up:Connect(function()
+                TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = baseSize}):Play()
+        end)
 end
 
 local function ripple(btn)
-	btn.ClipsDescendants = true
-	btn.MouseButton1Down:Connect(function()
-		local m = UIS:GetMouseLocation()
-		local abs = btn.AbsolutePosition
-		local rip = Instance.new("Frame", btn)
-		rip.BackgroundColor3 = WHITE
-		rip.BackgroundTransparency = 0.6
-		rip.BorderSizePixel = 0
-		rip.AnchorPoint = Vector2.new(0.5, 0.5)
-		rip.Position = UDim2.new(0, m.X - abs.X, 0, m.Y - abs.Y)
-		rip.Size = UDim2.new(0, 0, 0, 0)
-		corner(rip, 999)
-		local size = math.max(btn.AbsoluteSize.X, btn.AbsoluteSize.Y) * 2
-		TweenService:Create(rip, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{Size = UDim2.new(0, size, 0, size), BackgroundTransparency = 1}):Play()
-		task.delay(0.5, function() rip:Destroy() end)
-	end)
+        btn.ClipsDescendants = true
+        btn.MouseButton1Down:Connect(function()
+                local m = UIS:GetMouseLocation()
+                local abs = btn.AbsolutePosition
+                local rip = Instance.new("Frame", btn)
+                rip.BackgroundColor3 = WHITE
+                rip.BackgroundTransparency = 0.6
+                rip.BorderSizePixel = 0
+                rip.AnchorPoint = Vector2.new(0.5, 0.5)
+                rip.Position = UDim2.new(0, m.X - abs.X, 0, m.Y - abs.Y)
+                rip.Size = UDim2.new(0, 0, 0, 0)
+                corner(rip, 999)
+                local size = math.max(btn.AbsoluteSize.X, btn.AbsoluteSize.Y) * 2
+                TweenService:Create(rip, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, size, 0, size), BackgroundTransparency = 1}):Play()
+                task.delay(0.5, function() rip:Destroy() end)
+        end)
 end
 
 ----------------------------------------------------------------
@@ -155,40 +155,40 @@ gradient(toggle, PURPLE_A, PINK, 135)
 glow(toggle, PURPLE_A)
 
 task.spawn(function()
-	while toggle.Parent do
-		TweenService:Create(toggle, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Rotation = 8}):Play()
-		task.wait(2)
-		TweenService:Create(toggle, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Rotation = -8}):Play()
-		task.wait(2)
-	end
+        while toggle.Parent do
+                TweenService:Create(toggle, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Rotation = 8}):Play()
+                task.wait(2)
+                TweenService:Create(toggle, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Rotation = -8}):Play()
+                task.wait(2)
+        end
 end)
 
 local dragToggle, dragStart, startPos = false, nil, nil
 local function update(input)
-	local delta = input.Position - dragStart
-	local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-		startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	TweenService:Create(toggle, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		{Position = targetPos}):Play()
+        local delta = input.Position - dragStart
+        local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        TweenService:Create(toggle, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                {Position = targetPos}):Play()
 end
 
 toggle.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragToggle = true
-		dragStart = input.Position
-		startPos = toggle.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragToggle = false
-			end
-		end)
-	end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragToggle = true
+                dragStart = input.Position
+                startPos = toggle.Position
+                input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                                dragToggle = false
+                        end
+                end)
+        end
 end)
 
 UIS.InputChanged:Connect(function(input)
-	if dragToggle and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		update(input)
-	end
+        if dragToggle and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                update(input)
+        end
 end)
 
 ----------------------------------------------------------------
@@ -254,18 +254,18 @@ content.BackgroundTransparency = 1
 ----------------------------------------------------------------
 local open = true
 local function setOpen(state)
-	open = state
-	if open then
-		main.Visible = true
-		main.Size = UDim2.new(0, 0, 0, 0)
-		TweenService:Create(main, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-			{Size = UDim2.new(0, PANEL_W, 0, PANEL_H)}):Play()
-	else
-		local t = TweenService:Create(main, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-			{Size = UDim2.new(0, 0, 0, 0)})
-		t:Play()
-		t.Completed:Connect(function() main.Visible = false end)
-	end
+        open = state
+        if open then
+                main.Visible = true
+                main.Size = UDim2.new(0, 0, 0, 0)
+                TweenService:Create(main, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, PANEL_W, 0, PANEL_H)}):Play()
+        else
+                local t = TweenService:Create(main, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                        {Size = UDim2.new(0, 0, 0, 0)})
+                t:Play()
+                t.Completed:Connect(function() main.Visible = false end)
+        end
 end
 
 toggle.MouseButton1Click:Connect(function() setOpen(not open) end)
@@ -275,18 +275,18 @@ closeBtn.MouseButton1Click:Connect(function() setOpen(false) end)
 -- styled button factory (white text, crisp)
 ----------------------------------------------------------------
 local function style(btn, c1, c2)
-	c2 = c2 or c1
-	btn.BackgroundColor3 = c1
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 12
-	btn.AutoButtonColor = false
-	btn.BorderSizePixel = 0
-	whiteText(btn)
-	corner(btn, 9)
-	gradient(btn, c1, c2, 90)
-	stroke(btn, WHITE, 1, 0.85)
-	hoverScale(btn)
-	ripple(btn)
+        c2 = c2 or c1
+        btn.BackgroundColor3 = c1
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 12
+        btn.AutoButtonColor = false
+        btn.BorderSizePixel = 0
+        whiteText(btn)
+        corner(btn, 9)
+        gradient(btn, c1, c2, 90)
+        stroke(btn, WHITE, 1, 0.85)
+        hoverScale(btn)
+        ripple(btn)
 end
 
 ----------------------------------------------------------------
@@ -354,10 +354,10 @@ boxPad.PaddingLeft = UDim.new(0, 8)
 boxPad.PaddingRight = UDim.new(0, 8)
 
 box.Focused:Connect(function()
-	TweenService:Create(box:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.2), {Color = PINK, Transparency = 0.1}):Play()
+        TweenService:Create(box:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.2), {Color = PINK, Transparency = 0.1}):Play()
 end)
 box.FocusLost:Connect(function()
-	TweenService:Create(box:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.2), {Color = PURPLE_A, Transparency = 0.5}):Play()
+        TweenService:Create(box:FindFirstChildOfClass("UIStroke"), TweenInfo.new(0.2), {Color = PURPLE_A, Transparency = 0.5}):Play()
 end)
 
 local play = Instance.new("TextButton", side)
@@ -409,17 +409,19 @@ songsPad.PaddingLeft = UDim.new(0, 5)
 songsPad.PaddingRight = UDim.new(0, 5)
 
 local songs = {
-	{"kill me 💀",   "136373350899288"},
-	{"cant steal 💎","91214368916078"},
-	{"هعهعهع 😂",    "140669499902711"},
-	{"رعب 👻",       "133594398909422"},
-	{"omg hack 💻",  "121670695729530"},
-	{"طننننن 🔊",    "17070340316"},
-	{"ازعاج 📢",     "7713890963"},
-	{"اندلس 🏛️",     "132039307762001"},
-	{"كداوت 💥",     "139208046340684"},
-	{"شاورما 🌯",    "80487723481385"},
-	{"امبيه 😮",     "7657178494"},
+        {"kill me 💀",   "136373350899288"},
+        {"cant steal 💎","91214368916078"},
+        {"هعهعهع 😂",    "140669499902711"},
+        {"رعب 👻",       "133594398909422"},
+        {"omg hack 💻",  "121670695729530"},
+        {"طننننن 🔊",    "17070340316"},
+        {"ازعاج 📢",     "7713890963"},
+        {"اندلس 🏛️",     "132039307762001"},
+        {"كداوت 💥",     "139208046340684"},
+        {"شاورما 🌯",    "80487723481385"},
+        {"امبيه 😮",     "7657178494"},
+        {"نشيد",         "127840997774724"},
+        {"مصري",       "112355709978731"},
 }
 
 local sl = Instance.new("UIListLayout", songsFrame)
@@ -427,97 +429,97 @@ sl.Padding = UDim.new(0, 4)
 sl.SortOrder = Enum.SortOrder.LayoutOrder
 
 local palette = {
-	{Color3.fromRGB(120, 60, 200), Color3.fromRGB(80, 40, 150)},
-	{Color3.fromRGB(200, 70, 140), Color3.fromRGB(140, 40, 100)},
-	{Color3.fromRGB(60, 130, 220), Color3.fromRGB(40, 90, 170)},
-	{Color3.fromRGB(220, 130, 60), Color3.fromRGB(170, 90, 40)},
-	{Color3.fromRGB(60, 180, 160), Color3.fromRGB(40, 130, 120)},
+        {Color3.fromRGB(120, 60, 200), Color3.fromRGB(80, 40, 150)},
+        {Color3.fromRGB(200, 70, 140), Color3.fromRGB(140, 40, 100)},
+        {Color3.fromRGB(60, 130, 220), Color3.fromRGB(40, 90, 170)},
+        {Color3.fromRGB(220, 130, 60), Color3.fromRGB(170, 90, 40)},
+        {Color3.fromRGB(60, 180, 160), Color3.fromRGB(40, 130, 120)},
 }
 
 for i, s in ipairs(songs) do
-	local n, id = s[1], s[2]
-	local b = Instance.new("TextButton", songsFrame)
-	b.Size = UDim2.new(1, -8, 0, 24)
-	b.Text = "  " .. n
-	b.TextXAlignment = Enum.TextXAlignment.Left
-	b.LayoutOrder = i
-	local p = palette[((i - 1) % #palette) + 1]
-	style(b, p[1], p[2])
+        local n, id = s[1], s[2]
+        local b = Instance.new("TextButton", songsFrame)
+        b.Size = UDim2.new(1, -8, 0, 24)
+        b.Text = "  " .. n
+        b.TextXAlignment = Enum.TextXAlignment.Left
+        b.LayoutOrder = i
+        local p = palette[((i - 1) % #palette) + 1]
+        style(b, p[1], p[2])
 
-	b.MouseButton1Click:Connect(function()
-		box.Text = id
-		fireRemote(selectedTarget, id)
-		local original = label.BackgroundColor3
-		TweenService:Create(label, TweenInfo.new(0.15), {BackgroundColor3 = PINK}):Play()
-		task.delay(0.25, function()
-			TweenService:Create(label, TweenInfo.new(0.3), {BackgroundColor3 = original}):Play()
-		end)
-	end)
+        b.MouseButton1Click:Connect(function()
+                box.Text = id
+                fireRemote(selectedTarget, id)
+                local original = label.BackgroundColor3
+                TweenService:Create(label, TweenInfo.new(0.15), {BackgroundColor3 = PINK}):Play()
+                task.delay(0.25, function()
+                        TweenService:Create(label, TweenInfo.new(0.3), {BackgroundColor3 = original}):Play()
+                end)
+        end)
 end
 
 ----------------------------------------------------------------
 -- actions
 ----------------------------------------------------------------
 play.MouseButton1Click:Connect(function()
-	fireRemote(selectedTarget, box.Text)
+        fireRemote(selectedTarget, box.Text)
 end)
 
 spamBtn.MouseButton1Click:Connect(function()
-	spamming = not spamming
-	if spamming then
-		spamBtn.Text = "🛑  إيقاف"
-		local g = spamBtn:FindFirstChildOfClass("UIGradient")
-		if g then g.Color = ColorSequence.new(Color3.fromRGB(255, 80, 110), Color3.fromRGB(180, 40, 70)) end
-	else
-		spamBtn.Text = "🚀  سبام"
-		local g = spamBtn:FindFirstChildOfClass("UIGradient")
-		if g then g.Color = ColorSequence.new(Color3.fromRGB(110, 80, 140), Color3.fromRGB(70, 50, 100)) end
-	end
+        spamming = not spamming
+        if spamming then
+                spamBtn.Text = "🛑  إيقاف"
+                local g = spamBtn:FindFirstChildOfClass("UIGradient")
+                if g then g.Color = ColorSequence.new(Color3.fromRGB(255, 80, 110), Color3.fromRGB(180, 40, 70)) end
+        else
+                spamBtn.Text = "🚀  سبام"
+                local g = spamBtn:FindFirstChildOfClass("UIGradient")
+                if g then g.Color = ColorSequence.new(Color3.fromRGB(110, 80, 140), Color3.fromRGB(70, 50, 100)) end
+        end
 
-	task.spawn(function()
-		while spamming do
-			fireRemote(selectedTarget, box.Text)
-			task.wait(0.5)
-		end
-	end)
+        task.spawn(function()
+                while spamming do
+                        fireRemote(selectedTarget, box.Text)
+                        task.wait(0.5)
+                end
+        end)
 end)
 
 ----------------------------------------------------------------
 -- players refresh
 ----------------------------------------------------------------
 local function refresh()
-	for _, v in pairs(playerList:GetChildren()) do
-		if v:IsA("TextButton") then v:Destroy() end
-	end
+        for _, v in pairs(playerList:GetChildren()) do
+                if v:IsA("TextButton") then v:Destroy() end
+        end
 
-	local all = Instance.new("TextButton", playerList)
-	all.Size = UDim2.new(1, -8, 0, 24)
-	all.Text = "🌐 الكل"
-	all.LayoutOrder = 0
-	style(all, PURPLE_A, PURPLE_B)
+        local all = Instance.new("TextButton", playerList)
+        all.Size = UDim2.new(1, -8, 0, 24)
+        all.Text = "🌐 الكل"
+        all.LayoutOrder = 0
+        style(all, PURPLE_A, PURPLE_B)
 
-	all.MouseButton1Click:Connect(function()
-		selectedTarget = "الكل"
-		label.Text = "🎯 المستهدف: الكل"
-	end)
+        all.MouseButton1Click:Connect(function()
+                selectedTarget = "الكل"
+                label.Text = "🎯 المستهدف: الكل"
+        end)
 
-	for i, p in ipairs(Players:GetPlayers()) do
-		local b = Instance.new("TextButton", playerList)
-		b.Size = UDim2.new(1, -8, 0, 24)
-		b.Text = "👤 " .. p.Name
-		b.LayoutOrder = i
-		style(b, Color3.fromRGB(55, 45, 80), Color3.fromRGB(35, 28, 55))
+        for i, p in ipairs(Players:GetPlayers()) do
+                local b = Instance.new("TextButton", playerList)
+                b.Size = UDim2.new(1, -8, 0, 24)
+                b.Text = "👤 " .. p.Name
+                b.LayoutOrder = i
+                style(b, Color3.fromRGB(55, 45, 80), Color3.fromRGB(35, 28, 55))
 
-		b.BackgroundTransparency = 1
-		b.TextTransparency = 1
-		TweenService:Create(b, TweenInfo.new(0.3 + i * 0.04, Enum.EasingStyle.Quad),
-			{BackgroundTransparency = 0, TextTransparency = 0}):Play()
+                b.BackgroundTransparency = 1
+                b.TextTransparency = 1
+                TweenService:Create(b, TweenInfo.new(0.3 + i * 0.04, Enum.EasingStyle.Quad),
+                        {BackgroundTransparency = 0, TextTransparency = 0}):Play()
 
-		b.MouseButton1Click:Connect(function()
-			selectedTarget = p.Name
-			label.Text = "🎯 المستهدف: " .. p.Name
-		end)
-	end
+                b.MouseButton1Click:Connect(function()
+                        selectedTarget = p.Name
+                        label.Text = "🎯 المستهدف: " .. p.Name
+                end)
+        end
 end
 
 refresh()
