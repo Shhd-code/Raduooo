@@ -4,6 +4,184 @@ local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LP = Players.LocalPlayer
 
+----------------------------------------------------------------
+-- ✦ شاشة الباسورد
+----------------------------------------------------------------
+local PASS = "MZA"
+
+local _passGui = Instance.new("ScreenGui")
+_passGui.Name = "SHPassScreen"
+_passGui.IgnoreGuiInset = true
+_passGui.ResetOnSpawn = false
+_passGui.DisplayOrder = 99999
+_passGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+pcall(function() _passGui.Parent = game.CoreGui end)
+if not _passGui.Parent then _passGui.Parent = LP:WaitForChild("PlayerGui") end
+
+-- خلفية معتمة
+local _overlay = Instance.new("Frame", _passGui)
+_overlay.Size = UDim2.new(1, 0, 1, 0)
+_overlay.BackgroundColor3 = Color3.fromRGB(5, 3, 12)
+_overlay.BackgroundTransparency = 0.15
+_overlay.BorderSizePixel = 0
+
+-- البطاقة الرئيسية
+local _card = Instance.new("Frame", _passGui)
+_card.Size = UDim2.new(0, 340, 0, 210)
+_card.AnchorPoint = Vector2.new(0.5, 0.5)
+_card.Position = UDim2.new(0.5, 0, 0.5, 0)
+_card.BackgroundColor3 = Color3.fromRGB(18, 14, 30)
+_card.BackgroundTransparency = 0.05
+_card.BorderSizePixel = 0
+Instance.new("UICorner", _card).CornerRadius = UDim.new(0, 16)
+local _cStroke = Instance.new("UIStroke", _card)
+_cStroke.Color = Color3.fromRGB(170, 80, 255)
+_cStroke.Thickness = 2
+_cStroke.Transparency = 0.2
+
+local _cGrad = Instance.new("UIGradient", _card)
+_cGrad.Color = ColorSequence.new(Color3.fromRGB(22, 16, 40), Color3.fromRGB(12, 8, 22))
+_cGrad.Rotation = 135
+
+-- العنوان
+local _titleLbl = Instance.new("TextLabel", _card)
+_titleLbl.Size = UDim2.new(1, 0, 0, 54)
+_titleLbl.BackgroundTransparency = 1
+_titleLbl.Font = Enum.Font.GothamBlack
+_titleLbl.TextSize = 20
+_titleLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+_titleLbl.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+_titleLbl.TextStrokeTransparency = 0.5
+_titleLbl.Text = "🔐  SH Sound Hub"
+
+local _subLbl = Instance.new("TextLabel", _card)
+_subLbl.Size = UDim2.new(1, -20, 0, 22)
+_subLbl.Position = UDim2.new(0, 10, 0, 54)
+_subLbl.BackgroundTransparency = 1
+_subLbl.Font = Enum.Font.GothamBold
+_subLbl.TextSize = 14
+_subLbl.TextColor3 = Color3.fromRGB(200, 160, 255)
+_subLbl.Text = "أدخل الباسورد للمتابعة"
+
+-- صندوق الإدخال
+local _box = Instance.new("TextBox", _card)
+_box.Size = UDim2.new(1, -32, 0, 40)
+_box.Position = UDim2.new(0, 16, 0, 86)
+_box.BackgroundColor3 = Color3.fromRGB(28, 22, 45)
+_box.BackgroundTransparency = 0.1
+_box.BorderSizePixel = 0
+_box.Font = Enum.Font.GothamBold
+_box.TextSize = 15
+_box.TextColor3 = Color3.fromRGB(255, 255, 255)
+_box.PlaceholderText = "الباسورد..."
+_box.PlaceholderColor3 = Color3.fromRGB(140, 100, 200)
+_box.ClearTextOnFocus = false
+_box.Text = ""
+Instance.new("UICorner", _box).CornerRadius = UDim.new(0, 10)
+local _bStroke = Instance.new("UIStroke", _box)
+_bStroke.Color = Color3.fromRGB(170, 80, 255)
+_bStroke.Transparency = 0.4
+_bStroke.Thickness = 1.5
+
+-- رسالة الخطأ
+local _errLbl = Instance.new("TextLabel", _card)
+_errLbl.Size = UDim2.new(1, -20, 0, 18)
+_errLbl.Position = UDim2.new(0, 10, 0, 132)
+_errLbl.BackgroundTransparency = 1
+_errLbl.Font = Enum.Font.GothamBold
+_errLbl.TextSize = 13
+_errLbl.TextColor3 = Color3.fromRGB(255, 80, 80)
+_errLbl.TextTransparency = 1
+_errLbl.Text = "❌ باسورد خاطئ، حاول مرة ثانية"
+
+-- زر الإغلاق (X)
+local _closeBtn = Instance.new("TextButton", _card)
+_closeBtn.Size = UDim2.new(0, 30, 0, 30)
+_closeBtn.Position = UDim2.new(1, -38, 0, 8)
+_closeBtn.BackgroundColor3 = Color3.fromRGB(160, 30, 30)
+_closeBtn.BackgroundTransparency = 0.1
+_closeBtn.BorderSizePixel = 0
+_closeBtn.AutoButtonColor = false
+_closeBtn.Font = Enum.Font.GothamBold
+_closeBtn.Text = "✕"
+_closeBtn.TextSize = 15
+_closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", _closeBtn).CornerRadius = UDim.new(0, 8)
+_closeBtn.MouseEnter:Connect(function()
+    TweenService:Create(_closeBtn, TweenInfo.new(0.12), {BackgroundColor3 = Color3.fromRGB(220, 50, 50)}):Play()
+end)
+_closeBtn.MouseLeave:Connect(function()
+    TweenService:Create(_closeBtn, TweenInfo.new(0.12), {BackgroundColor3 = Color3.fromRGB(160, 30, 30)}):Play()
+end)
+_closeBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(_card, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+        {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1}):Play()
+    task.wait(0.3)
+    _passGui:Destroy()
+end)
+
+-- زر الدخول
+local _enterBtn = Instance.new("TextButton", _card)
+_enterBtn.Size = UDim2.new(1, -32, 0, 40)
+_enterBtn.Position = UDim2.new(0, 16, 0, 156)
+_enterBtn.BackgroundColor3 = Color3.fromRGB(110, 50, 200)
+_enterBtn.BackgroundTransparency = 0.05
+_enterBtn.BorderSizePixel = 0
+_enterBtn.AutoButtonColor = false
+_enterBtn.Font = Enum.Font.GothamBold
+_enterBtn.Text = "✅  دخول"
+_enterBtn.TextSize = 16
+_enterBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+_enterBtn.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+_enterBtn.TextStrokeTransparency = 0.5
+Instance.new("UICorner", _enterBtn).CornerRadius = UDim.new(0, 10)
+local _eBG = Instance.new("UIGradient", _enterBtn)
+_eBG.Color = ColorSequence.new(Color3.fromRGB(170, 80, 255), Color3.fromRGB(95, 40, 200))
+_eBG.Rotation = 90
+
+-- تأثيرات hover
+_enterBtn.MouseEnter:Connect(function()
+    TweenService:Create(_enterBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(140, 70, 230)}):Play()
+end)
+_enterBtn.MouseLeave:Connect(function()
+    TweenService:Create(_enterBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(110, 50, 200)}):Play()
+end)
+_box:GetPropertyChangedSignal("Text"):Connect(function()
+    TweenService:Create(_bStroke, TweenInfo.new(0.15), {Transparency = _box.Text ~= "" and 0.05 or 0.4}):Play()
+end)
+
+-- منطق التحقق
+local _verified = false
+local function _checkPass()
+    if _box.Text == PASS then
+        _verified = true
+        TweenService:Create(_card, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+            {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1}):Play()
+        task.wait(0.35)
+        _passGui:Destroy()
+    else
+        _errLbl.TextTransparency = 0
+        TweenService:Create(_box, TweenInfo.new(0.07), {Position = UDim2.new(0, 22, 0, 86)}):Play()
+        task.wait(0.07)
+        TweenService:Create(_box, TweenInfo.new(0.07), {Position = UDim2.new(0, 10, 0, 86)}):Play()
+        task.wait(0.07)
+        TweenService:Create(_box, TweenInfo.new(0.07), {Position = UDim2.new(0, 16, 0, 86)}):Play()
+        task.delay(2, function()
+            TweenService:Create(_errLbl, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+        end)
+    end
+end
+
+_enterBtn.MouseButton1Click:Connect(_checkPass)
+_box.FocusLost:Connect(function(enter) if enter then _checkPass() end end)
+
+-- انتظر التحقق قبل تحميل الباقي
+repeat task.wait(0.05) until _verified
+
+----------------------------------------------------------------
+-- ✦ السكربت الرئيسي (يعمل فقط بعد الباسورد)
+----------------------------------------------------------------
+
 local spamming = false
 local selectedTarget = "الكل"
 
@@ -540,6 +718,10 @@ local songs = {
         {"انساك",              "99391269377766"},
         {"حمود",               "5225783799"},
         {"ميلي",               "133682020019480"},
+        -- ✦ إضافات جديدة ✦
+        {"سبونج",              "96747038140954"},
+        {"تنغساهور",           "117121991980809"},
+        {"ماشا",               "128160683925215"},
 }
 
 local sl = Instance.new("UIListLayout", songsFrame)
